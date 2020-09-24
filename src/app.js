@@ -7,7 +7,7 @@ const helmet = require('helmet')
 const { NODE_ENV } = require('./config')
 //winston is a logger
 const winston = require('winston');
-const usersRouter = require('./example/users-routers')
+const usersRouter = require('./users/users-routers')
 
 const app = express()
 
