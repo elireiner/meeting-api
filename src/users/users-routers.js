@@ -8,14 +8,15 @@ const jsonParser = express.json()
 
 const serialize = user => ({
     id: user.id,
-    user_name: user.user_name
+    _id: xss(user._id),
+    first_name: xss(user.first_name),
+    last_name: xss(user.last_name)
 })
 
 usersRouter
     .route('/')
     .get((req, res, next) => {
-        res.status(200).send('users')
-       // const knexInstance = req.app.get('db');
+        const knexInstance = req.app.get('db');
         UsersService.getAllUsers(knexInstance)
             .then(users => {
                 res.json(users.map(serialize))
@@ -83,13 +84,13 @@ usersRouter
         const { user_name } = req.body;
         const userToUpdate = { user_name }
 
-     
+
         if (!user_name) {
             return res.status(400).json({
-                error: {message: `Request body must contain a user_name `}
+                error: { message: `Request body must contain a user_name ` }
             })
         }
-        
+
         UsersService.updateUser(
             req.app.get('db'),
             req.params.user_id,
