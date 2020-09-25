@@ -14,7 +14,7 @@ const serialize = user => ({
 usersRouter
     .route('/')
     .get((req, res, next) => {
-        res.json('users')
+        res.status(200).send('users')
        // const knexInstance = req.app.get('db');
         UsersService.getAllUsers(knexInstance)
             .then(users => {
