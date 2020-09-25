@@ -1,7 +1,7 @@
 const UsersService = {
     
     getAllUsers(knex) {
-        return knex.select('*').from('noteful_users')
+        return knex.select('*').from('users')
     },
 
     insertUser(knex, newUser) {
