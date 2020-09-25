@@ -6,8 +6,8 @@
   "scripts": {
     "start": "node src/server.js",
     "dev": "nodemon src/server.js",
-    "connect": "psql -U user database",
-    "connect:test": "psql -U user database_test",
+    "connect": "psql -U dunder_mifflin meetings",
+    "connect:test": "psql -U dunder_mifflin meetings-test",
     "connect:production": "heroku pg:psql",
     "migrate": "postgrator --config postgrator-config.js",
     "migrate:test": "env NODE_ENV=test npm run migrate",
