@@ -15,12 +15,12 @@ describe('/api/users', () => {
     })
 
     describe('GET /api/user', () => {
-        context('When there is no db', () => {
+        context('When there are no users in the db', () => {
             it('responds with 200 and "users"', () => {
                 return supertest(app)
                     .get('/api/users')
                     .set({ 'Authorization': `Bearer ${process.env.API_TOKEN}` })
-                    .expect(200, 'users')
+                    .expect(200, [])
             })
         })
     })
