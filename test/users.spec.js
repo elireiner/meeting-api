@@ -14,13 +14,24 @@ describe('/api/users', () => {
         app.set('db', db)
     })
 
-    describe('GET /api/user', () => {
+    describe('GET /api/users', () => {
         context('When there are no users in the db', () => {
             it('responds with 200 and "users"', () => {
                 return supertest(app)
                     .get('/api/users')
                     .set({ 'Authorization': `Bearer ${process.env.API_TOKEN}` })
                     .expect(200, [])
+            })
+        })
+    })
+
+    describe('GET /api/users/:userId', () => {
+        context('When there are no users in the db', () => {
+            it('responds with 404', () => {
+                return supertest(app)
+                    .get('/api/users/1')
+                    .set({ 'Authorization': `Bearer ${process.env.API_TOKEN}` })
+                    .expect(404)
             })
         })
     })
