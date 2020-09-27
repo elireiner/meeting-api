@@ -4,7 +4,7 @@ const UsersService = {
         return knex.select('*').from('users')
     },
 
-    insertUser(knex, newUser) {
+    /*insertUser(knex, newUser) {
         return knex
             .insert(newUser)
             .into('noteful_users')
@@ -12,13 +12,13 @@ const UsersService = {
             .then(rows => {
                 return rows[0]
             })
-    },
+    },*/
 
     getById(knex, id) {
-        return knex.from('noteful_users').select('*').where('id', id).first()
+        return knex.from('users').select('*').where('id', id).first()
     },
 
-    deleteUser(knex, id) {
+    /*deleteUser(knex, id) {
         return knex('noteful_users')
             .where({ id })
             .delete()
@@ -28,7 +28,7 @@ const UsersService = {
         return knex('noteful_users')
             .where({ id })
             .update(newUserFields)
-    },
+    },*/
 }
 
 module.exports = UsersService
