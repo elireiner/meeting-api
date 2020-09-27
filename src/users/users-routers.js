@@ -23,7 +23,7 @@ usersRouter
             })
             .catch(next)
     })
-    .post(jsonParser, (req, res, next) => {
+    /*.post(jsonParser, (req, res, next) => {
         const { user_name } = req.body;
         const newUser = { user_name };
 
@@ -45,14 +45,15 @@ usersRouter
                     .json(serialize(user))
             })
             .catch(next)
-    })
+    })*/
 
 usersRouter
-    .route('/user/:user_id')
+    .route('/:user_id')
     .all((req, res, next) => {
+       const userId = Number(req.params.user_id)
         UsersService.getById(
             req.app.get('db'),
-            req.params.user_id
+            userId
         )
             .then(user => {
                 if (!user) {
@@ -69,10 +70,12 @@ usersRouter
     .get((req, res, next) => {
         res.json({
             id: res.user.id,
-            user_name: xss(res.user_name), // sanitize title
+            _id: xss(res.user._id),
+            first_name: xss(res.user.first_name),
+            last_name:  xss(res.user.last_name), //TODO: sanitize title with map serialize
         })
     })
-    .delete(jsonParser, (req, res, next) => {
+    /*.delete(jsonParser, (req, res, next) => {
         UsersService.deleteUser(req.app.get('db'),
             req.params.user_id)
             .then(numRowsAffected => {
@@ -102,6 +105,6 @@ usersRouter
             })
 
             .catch(next)
-    })
+    })*/
 
 module.exports = usersRouter
