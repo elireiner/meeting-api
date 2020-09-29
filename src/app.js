@@ -8,6 +8,7 @@ const { NODE_ENV } = require('./config')
 //winston is a logger
 const winston = require('winston');
 const usersRouter = require('./users/users-routers')
+const meetingRouter = require('./meetings/meetings-router')
 
 const app = express()
 
@@ -56,6 +57,8 @@ app.get('/', (req, res) => {
 })
 
 app.use('/api/users', usersRouter)
+
+app.use('/api/meetings', meetingRouter)
 
 app.use(function errorHandler(error, req, res, next) {
     let response
