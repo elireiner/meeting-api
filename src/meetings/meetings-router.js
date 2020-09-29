@@ -71,10 +71,12 @@ meetingRouter
     })
     .get((req, res, next) => {
         res.json({
-            id: res.meeting.id,
-            _id: xss(res.meeting._id),
-            first_name: xss(res.meeting.first_name),
-            last_name: xss(res.meeting.last_name), //TODO: sanitize title with map serialize
+            id:  res.meeting.id,
+            _id: xss( res.meeting._id),
+            meeting_name: xss( res.meeting.meeting_name),
+            meeting_type: xss( res.meeting.meeting_type),
+            description: xss( res.meeting.description),
+            meeting_time: xss( res.meeting.meeting_time), //TODO: sanitize title with map serialize
         })
     })
 /*.delete(jsonParser, (req, res, next) => {
