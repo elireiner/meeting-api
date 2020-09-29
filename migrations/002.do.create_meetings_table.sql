@@ -4,7 +4,7 @@ CREATE TABLE meetings (
     _id UUID NOT NULL,
     meeting_name text NOT NULL,
     meeting_type text NOT NULL,
-    discription text NOT NULL,
+    description text NOT NULL,
     meeting_time TIMESTAMPTZ NOT NULL
 );
 
