@@ -26,20 +26,21 @@ meetingRouter
             .catch(next)
     })
     .post(jsonParser, (req, res, next) => {
-        const { meeting_name } = req.body;
-        const newMeeting = { meeting_name };
+        const { _id, meeting_name, meeting_type, description, meeting_time } = req.body;
+        const newMeeting = { _id, meeting_name, meeting_type, description, meeting_time };
 
-        if (!meeting_name) {
-            return res.status(400).json({
-                error: { message: `Missing 'meeting_name' in request body` }
-            })
+        for (const [key, value] of Object.entries(newMeeting)){
+            if (!value) {
+                return res.status(400).json({
+                    error: { message: `Missing '${key}' in request body` }
+                })
+            }
         }
 
         MeetingsService.insertMeeting(
             req.app.get('db'),
             newMeeting
         )
-
             .then(meeting => {
                 res
                     .status(201)
@@ -71,12 +72,12 @@ meetingRouter
     })
     .get((req, res, next) => {
         res.json({
-            id:  res.meeting.id,
-            _id: xss( res.meeting._id),
-            meeting_name: xss( res.meeting.meeting_name),
-            meeting_type: xss( res.meeting.meeting_type),
-            description: xss( res.meeting.description),
-            meeting_time: xss( res.meeting.meeting_time), //TODO: sanitize title with map serialize
+            id: res.meeting.id,
+            _id: xss(res.meeting._id),
+            meeting_name: xss(res.meeting.meeting_name),
+            meeting_type: xss(res.meeting.meeting_type),
+            description: xss(res.meeting.description),
+            meeting_time: xss(res.meeting.meeting_time), //TODO: sanitize title with map serialize
         })
     })
 /*.delete(jsonParser, (req, res, next) => {
