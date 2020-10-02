@@ -7,7 +7,7 @@ const meetingRouter = express.Router()
 const jsonParser = express.json()
 
 const serialize = meeting => ({
-    id: meeting.id,
+    meeting_id: meeting.meeting_id,
     _id: xss(meeting._id),
     meeting_name: xss(meeting.meeting_name),
     meeting_type: xss(meeting.meeting_type),
@@ -44,7 +44,7 @@ meetingRouter
             .then(meeting => {
                 res
                     .status(201)
-                    .location(path.posix.join(req.originalUrl, `/${meeting.id}`))
+                    .location(path.posix.join(req.originalUrl, `/${meeting.meeting_id}`))
                     .json(serialize(meeting))
             })
             .catch(next)
@@ -72,7 +72,7 @@ meetingRouter
     })
     .get((req, res, next) => {
         res.json({
-            id: res.meeting.id,
+            meeting_id: res.meeting.meeting_id,
             _id: xss(res.meeting._id),
             meeting_name: xss(res.meeting.meeting_name),
             meeting_type: xss(res.meeting.meeting_type),

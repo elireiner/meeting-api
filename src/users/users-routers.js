@@ -7,7 +7,7 @@ const usersRouter = express.Router()
 const jsonParser = express.json()
 
 const serialize = user => ({
-    id: user.id,
+    user_id: user.user_id,
     _id: xss(user._id),
     first_name: xss(user.first_name),
     last_name: xss(user.last_name)
@@ -41,7 +41,7 @@ usersRouter
             .then(user => {
                 res
                     .status(201)
-                    .location(path.posix.join(req.originalUrl, `/${user.id}`))
+                    .location(path.posix.join(req.originalUrl, `/${user.user_id}`))
                     .json(serialize(user))
             })
             .catch(next)
@@ -69,7 +69,7 @@ usersRouter
     })
     .get((req, res, next) => {
         res.json({
-            id: res.user.id,
+            user_id: res.user.user_id,
             _id: xss(res.user._id),
             first_name: xss(res.user.first_name),
             last_name:  xss(res.user.last_name), //TODO: sanitize title with map serialize
