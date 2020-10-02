@@ -5,5 +5,5 @@ CREATE TABLE assesment (
     metric_id int REFERENCES metrics (metric_id) ON DELETE CASCADE,
     metric_value int NOT NULL,
     user_id int REFERENCES users (user_id) ON DELETE CASCADE,
-    meeting_id int REFERENCES meetings (meeting_id) ON DELETE CASCADEs
+    meeting_id int REFERENCES meetings (meeting_id) ON DELETE CASCADE
 );
