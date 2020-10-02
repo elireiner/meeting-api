@@ -11,6 +11,7 @@ const usersRouter = require('./users/users-routers')
 const meetingRouter = require('./meetings/meetings-router')
 const departmentRouter = require('./departments/departments-router')
 const metricRouter = require('./metrics/metrics-router')
+const userTeamRouter = require('./userTeam/userTeam-router')
 
 const app = express()
 
@@ -43,15 +44,15 @@ if (NODE_ENV !== 'production') {
 
 
 app.use(function validateBearerToken(req, res, next) {
-  const apiToken = process.env.API_TOKEN
-  const authToken = req.get('Authorization')
+    const apiToken = process.env.API_TOKEN
+    const authToken = req.get('Authorization')
 
-  if (!authToken || authToken.split(' ')[1] !== apiToken) {
-    logger.error(`Unauthorized request to path: ${req.path}`);
-    return res.status(401).json({ error: 'Unauthorized request' })
-  }
+    if (!authToken || authToken.split(' ')[1] !== apiToken) {
+        logger.error(`Unauthorized request to path: ${req.path}`);
+        return res.status(401).json({ error: 'Unauthorized request' })
+    }
 
-  next()
+    next()
 })
 
 app.get('/', (req, res) => {
@@ -65,6 +66,8 @@ app.use('/api/meetings', meetingRouter)
 app.use('/api/departments', departmentRouter)
 
 app.use('/api/metrics', metricRouter)
+
+app.use('/api/user-team', userTeamRouter)
 
 app.use(function errorHandler(error, req, res, next) {
     let response
