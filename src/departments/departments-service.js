@@ -15,7 +15,7 @@ const DepartmentsService = {
     },
 
     getById(knex, id) {
-        return knex.from('departments').select('*').where('id', id).first()
+        return knex.from('departments').select('*').where('department_id', id).first()
     },
 
     /*deleteDepartment(knex, id) {

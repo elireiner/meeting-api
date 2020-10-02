@@ -15,7 +15,7 @@ const MetricsService = {
     },
 
     getById(knex, id) {
-        return knex.from('metrics').select('*').where('id', id).first()
+        return knex.from('metrics').select('*').where('metric_id', id).first()
     },
 
     /*deleteMetric(knex, id) {

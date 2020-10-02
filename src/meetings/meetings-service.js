@@ -15,7 +15,7 @@ const MeetingsService = {
     },
 
     getById(knex, id) {
-        return knex.from('meetings').select('*').where('id', id).first()
+        return knex.from('meetings').select('*').where('meeting_id', id).first()
     },
 
     /*deleteMeeting(knex, id) {
