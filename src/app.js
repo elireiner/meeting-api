@@ -9,6 +9,8 @@ const { NODE_ENV } = require('./config')
 const winston = require('winston');
 const usersRouter = require('./users/users-routers')
 const meetingRouter = require('./meetings/meetings-router')
+const departmentRouter = require('./departments/departments-router')
+const metricRouter = require('./metrics/metrics-router')
 
 const app = express()
 
@@ -59,6 +61,10 @@ app.get('/', (req, res) => {
 app.use('/api/users', usersRouter)
 
 app.use('/api/meetings', meetingRouter)
+
+app.use('/api/departments', departmentRouter)
+
+app.use('/api/metrics', metricRouter)
 
 app.use(function errorHandler(error, req, res, next) {
     let response
