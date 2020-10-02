@@ -2,7 +2,7 @@ const knex = require('knex');
 const app = require('../src/app');
 const supertest = require('supertest');
 
-describe('/api/ meetings', () => {
+describe('/api/meetings', () => {
 
     let db;
 
