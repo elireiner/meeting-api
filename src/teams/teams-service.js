@@ -31,4 +31,4 @@ const teamsService = {
     }
 }
 
-module.exports = userTeamService
+module.exports = teamsService
