@@ -15,16 +15,20 @@ const MetricsService = {
     },
 
     getById(knex, id) {
-        return knex.from('metrics').select('*').where('metric_id', id).first()
+        return knex.from('metrics').select('*').where('_id', id).first()
     },
 
-    /*deleteMetric(knex, id) {
+    deleteMetric(knex, _id) {
         return knex('metrics')
-            .where({ id })
+            .where({ _id })
             .delete()
     },
 
-    updateMetric(knex, id, newMetricFields) {
+    deleteAllMetrics(knex) {
+        return knex.raw(`TRUNCATE TABLE metrics RESTART IDENTITY CASCADE;`)
+    },
+
+   /* updateMetric(knex, id, newMetricFields) {
         return knex('metrics')
             .where({ id })
             .update(newMetricFields)
