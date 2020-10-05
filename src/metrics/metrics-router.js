@@ -7,7 +7,7 @@ const metricRouter = express.Router()
 const jsonParser = express.json()
 
 const serialize = metric => ({
-    metric_id: metric.metric_id,
+    _id: metric._id,
     _id: xss(metric._id),
     metric_name: xss(metric.metric_name)
 })
@@ -41,16 +41,23 @@ metricRouter
             .then(metric => {
                 res
                     .status(201)
-                    .location(path.posix.join(req.originalUrl, `/${metric.metric_id}`))
+                    .location(path.posix.join(req.originalUrl, `/${metric._id}`))
                     .json(serialize(metric))
+            })
+            .catch(next)
+    })
+    .delete(jsonParser, (req, res, next) => {
+        MetricsService.deleteAllMetrics(req.app.get('db'))
+            .then(numRowsAffected => {
+                res.status(204).end()
             })
             .catch(next)
     })
 
 metricRouter
-    .route('/:metric_id')
+    .route('/:_id')
     .all((req, res, next) => {
-        const metricId = Number(req.params.metric_id)
+        const metricId = Number(req.params._id)
         MetricsService.getById(
             req.app.get('db'),
             metricId
@@ -67,15 +74,15 @@ metricRouter
             .catch(next)
 
     })
-/*.delete(jsonParser, (req, res, next) => {
+.delete(jsonParser, (req, res, next) => {
     MetricsService.deleteMetric(req.app.get('db'),
-        req.params.metric_id)
+        req.params._id)
         .then(numRowsAffected => {
             res.status(204).end()
         })
         .catch(next)
 })
-.patch(jsonParser, (req, res, next) => {
+/*.patch(jsonParser, (req, res, next) => {
     const { metric_name } = req.body;
     const metricToUpdate = { metric_name }
 
@@ -88,7 +95,7 @@ metricRouter
 
     MetricsService.updateMetric(
         req.app.get('db'),
-        req.params.metric_id,
+        req.params._id,
         metricToUpdate
     )
 
