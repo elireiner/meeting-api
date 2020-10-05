@@ -26,10 +26,10 @@ meetingRouter
             .catch(next)
     })
     .post(jsonParser, (req, res, next) => {
-        const { _id, meeting_name, meeting_type, description, meeting_time } = req.body;
-        const newMeeting = { _id, meeting_name, meeting_type, description, meeting_time };
+        const { _id, meeting_name, meeting_type, description, user_team_id, meeting_time } = req.body;
+        const newMeeting = { _id, meeting_name, meeting_type, description, user_team_id, meeting_time };
 
-        for (const [key, value] of Object.entries(newMeeting)){
+        for (const [key, value] of Object.entries(newMeeting)) {
             if (!value) {
                 return res.status(400).json({
                     error: { message: `Missing '${key}' in request body` }
@@ -47,7 +47,7 @@ meetingRouter
                     .location(path.posix.join(req.originalUrl, `/${meeting.meeting_id}`))
                     .json(serialize(meeting))
             })
-            .catch(next)
+          .catch(next)
     })
 
 meetingRouter
