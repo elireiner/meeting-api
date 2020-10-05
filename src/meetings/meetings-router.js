@@ -47,13 +47,13 @@ meetingRouter
                     .location(path.posix.join(req.originalUrl, `/${meeting.meeting_id}`))
                     .json(serialize(meeting))
             })
-          .catch(next)
+            .catch(next)
     })
 
 meetingRouter
-    .route('/:meeting_id')
+    .route('/:_id')
     .all((req, res, next) => {
-        const meetingId = Number(req.params.meeting_id)
+        const meetingId = req.params._id
         MeetingsService.getById(
             req.app.get('db'),
             meetingId
@@ -80,15 +80,17 @@ meetingRouter
             meeting_time: xss(res.meeting.meeting_time), //TODO: sanitize title with map serialize
         })
     })
-/*.delete(jsonParser, (req, res, next) => {
-    MeetingsService.deleteMeeting(req.app.get('db'),
-        req.params.meeting_id)
-        .then(numRowsAffected => {
-            res.status(204).end()
-        })
-        .catch(next)
-})
-.patch(jsonParser, (req, res, next) => {
+    .delete(jsonParser, (req, res, next) => {
+        MeetingsService.deleteMeeting(
+            req.app.get('db'),
+            req.params._id
+        )
+            .then(numRowsAffected => {
+                res.status(204).end()
+            })
+            .catch(next)
+    })
+/*.patch(jsonParser, (req, res, next) => {
     const { meeting_name } = req.body;
     const meetingToUpdate = { meeting_name }
 
