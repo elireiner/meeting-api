@@ -15,16 +15,16 @@ const MeetingsService = {
     },
 
     getById(knex, id) {
-        return knex.from('meetings').select('*').where('meeting_id', id).first()
+        return knex.from('meetings').select('*').where('_id', id).first()
     },
 
-    /*deleteMeeting(knex, id) {
+    deleteMeeting(knex, _id) {
         return knex('meetings')
-            .where({ id })
+            .where({ _id })
             .delete()
     },
 
-    updateMeeting(knex, id, newMeetingFields) {
+   /* updateMeeting(knex, id, newMeetingFields) {
         return knex('meetings')
             .where({ id })
             .update(newMeetingFields)
