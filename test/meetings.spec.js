@@ -2,7 +2,7 @@ const knex = require('knex');
 const app = require('../src/app');
 const supertest = require('supertest');
 const UsersService = require('../src/users/users-service')
-const UserTeamService = require('../src/userTeam/userTeam-service.js')
+const teamsService = require('../src/teams/teams-service.js')
 
 
 describe('/api/meetings', () => {
@@ -52,12 +52,12 @@ describe('/api/meetings', () => {
                     newUser
                 )
                     .then(async res => {
-                        await UserTeamService.insertTeam(
+                        await teamsService.insertTeam(
                             db,
                             newTeam
                         )
                             .then(async res => {
-                                await UserTeamService.insertUserTeam(
+                                await teamsService.insertUserTeam(
                                     db,
                                     newUserTeam
                                 )
@@ -106,7 +106,7 @@ describe('/api/meetings', () => {
                     db
                 )
                     .then(async res => {
-                        await UserTeamService.deleteAllTeams(
+                        await teamsService.deleteAllTeams(
                             db
                         )
                             .catch()
