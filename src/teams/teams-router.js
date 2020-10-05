@@ -1,9 +1,9 @@
 const path = require('path');
 const express = require('express')
 const xss = require('xss')
-const userTeamService = require('./userTeam-service')
+const teamsService = require('./teams-service')
 
-const userTeamRouter = express.Router()
+const teamsRouter = express.Router()
 //const jsonParser = express.json()
 
 const serialize = user_team => ({
@@ -12,11 +12,34 @@ const serialize = user_team => ({
     user_team_name: xss(user_team.user_team_name)
 })
 
-userTeamRouter
+teamsRouter
+    .route('/')
+    .all((req, res, next) => {
+        const user_teamId = Number(req.params.user_team_id)
+        teamsService.getAllTeams(
+            req.app.get('db')
+        )
+            .then(teams => {
+                if (!teams) {
+                    return res.status(404).json({
+                        error: { message: `There was an error when getting the teams` }
+                    })
+                }
+                res.teams = teams;
+                next()
+            })
+            .catch(next)
+
+    })
+    .get((req, res, next) => {
+        res.json(res.teams)
+    })
+
+teamsRouter
     .route('/:user_id')
     .all((req, res, next) => {
         const user_teamId = Number(req.params.user_team_id)
-        userTeamService.getById(
+        teamsService.getById(
             req.app.get('db'),
             user_teamId
         )
@@ -36,4 +59,4 @@ userTeamRouter
         res.json(res.user_team.rows)
     })
 
-module.exports = userTeamRouter
+module.exports = teamsRouter
