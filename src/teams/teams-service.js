@@ -1,9 +1,10 @@
-const userTeamService = {
+const teamsService = {
     
     getAllTeams(knex) {
         return knex.select('*').from('teams')
     },
 // TODO: dynamically use the id
+// TODO: change to getByUserId
     getById(knex, id) {
         return knex.raw(`SELECT * FROM user_team ut INNER JOIN teams t on ut.team_id = t.team_id WHERE ut.user_id = 1`)
     },

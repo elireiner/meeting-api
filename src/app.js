@@ -11,7 +11,7 @@ const usersRouter = require('./users/users-routers')
 const meetingRouter = require('./meetings/meetings-router')
 const departmentRouter = require('./departments/departments-router')
 const metricRouter = require('./metrics/metrics-router')
-const userTeamRouter = require('./userTeam/userTeam-router')
+const teamsRouter = require('./teams/teams-router')
 
 const app = express()
 
@@ -67,7 +67,7 @@ app.use('/api/departments', departmentRouter)
 
 app.use('/api/metrics', metricRouter)
 
-app.use('/api/user-team', userTeamRouter)
+app.use('/api/teams', teamsRouter)
 
 app.use(function errorHandler(error, req, res, next) {
     let response
