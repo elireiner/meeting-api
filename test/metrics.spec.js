@@ -24,12 +24,12 @@ describe('/api/metrics', () => {
             })
         })
     })
-    
+
     describe('POST /api/metrics', () => {
         context('When the newMetric has all fields', () => {
             const newMetric = {
-                "_id": "1903cce2-ff22-463b-b45d-06cb6e671880",
-                "metric_name": "Plan"
+                '_id': '1903cce2-ff22-463b-b45d-06cb6e671880',
+                'metric_name': 'Plan'
             }
 
             it('responds with 201', () => {
@@ -38,6 +38,18 @@ describe('/api/metrics', () => {
                     .set({ 'Authorization': `Bearer ${process.env.API_TOKEN}` })
                     .send(newMetric)
                     .expect(201)
+            })
+        })
+    })
+    
+    describe('DELETE /api/metrics', () => {
+        context('When there are metrics in the table', () => {
+
+            it('responds with 204', () => {
+                return supertest(app)
+                    .delete('/api/metrics')
+                    .set({ 'Authorization': `Bearer ${process.env.API_TOKEN}` })
+                    .expect(204)
             })
         })
     })
