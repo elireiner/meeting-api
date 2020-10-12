@@ -1,0 +1,12 @@
+#!/bin/sh
+psql -U the_user the_database <<OMG
+BEGIN;
+
+\i file1.sql
+
+\i file2.sql
+
+COMMIT;
+OMG
+
+#eof
