@@ -114,4 +114,40 @@ meetingRouter
         .catch(next)
 })*/
 
+
+meetingRouter
+    .route('/user/:_id')
+    .all((req, res, next) => {
+        const userId = req.params._id
+        MeetingsService.getByUserId(
+            req.app.get('db'),
+            userId
+        )
+            .then(meeting => {
+                if (!meeting) {
+                    return res.status(404).json({
+                        error: { message: `User does not exist` }
+                    })
+                }
+                res.meeting = meeting.rows;
+                next()
+            })
+            .catch(next)
+
+    })
+    .get((req, res, next) => {
+        const meetings = res.meeting.map(meeting => {
+            return {
+                meeting_id: meeting.meeting_id,
+                _id: xss(meeting._id),
+                meeting_name: xss(meeting.meeting_name),
+                meeting_type: xss(meeting.meeting_type),
+                description: xss(meeting.description),
+                meeting_time: xss(meeting.meeting_time) //TODO: sanitize title with map serialize
+            }
+        })
+        console.log(meetings)
+        res.json(meetings)
+    })
+
 module.exports = meetingRouter
