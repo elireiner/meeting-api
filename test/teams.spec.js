@@ -31,7 +31,7 @@ describe('/api/teams', () => {
                 return supertest(app)
                     .get('/api/teams/1')
                     .set({ 'Authorization': `Bearer ${process.env.API_TOKEN}` })
-                    .expect(404)
+                    .expect(200)
             })
         })
     })
