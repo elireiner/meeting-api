@@ -12,6 +12,8 @@ const serialize = meeting => ({
     meeting_name: xss(meeting.meeting_name),
     meeting_type: xss(meeting.meeting_type),
     description: xss(meeting.description),
+    recurring: meeting.recurring,
+    recurring_id: meeting.recurring_id,
     meeting_time: xss(meeting.meeting_time),
 })
 
@@ -26,8 +28,8 @@ meetingRouter
             .catch(next)
     })
     .post(jsonParser, (req, res, next) => {
-        const { _id, meeting_name, meeting_type, description, user_team_id, meeting_time } = req.body;
-        const newMeeting = { _id, meeting_name, meeting_type, description, user_team_id, meeting_time };
+        const { _id, meeting_name, meeting_type, description, user_team_id, recurring, recurring_id, meeting_time } = req.body;
+        const newMeeting = { _id, meeting_name, meeting_type, description, user_team_id, recurring, recurring_id, meeting_time };
 
         for (const [key, value] of Object.entries(newMeeting)) {
             if (!value) {
@@ -77,6 +79,8 @@ meetingRouter
             meeting_name: xss(res.meeting.meeting_name),
             meeting_type: xss(res.meeting.meeting_type),
             description: xss(res.meeting.description),
+            recurring: res.meeting.recurring,
+            recurring_id: res.meeting.recurring_id,
             meeting_time: xss(res.meeting.meeting_time), //TODO: sanitize title with map serialize
         })
     })
@@ -143,10 +147,12 @@ meetingRouter
                 meeting_name: xss(meeting.meeting_name),
                 meeting_type: xss(meeting.meeting_type),
                 description: xss(meeting.description),
+                recurring: res.meeting.recurring,
+                recurring_id: res.meeting.recurring_id,
                 meeting_time: xss(meeting.meeting_time) //TODO: sanitize title with map serialize
             }
         })
-        console.log(meetings)
+        
         res.json(meetings)
     })
 
