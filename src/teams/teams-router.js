@@ -38,10 +38,10 @@ teamsRouter
 teamsRouter
     .route('/:user_id')
     .all((req, res, next) => {
-        const user_teamId = Number(req.params.user_team_id)
+        const user_Id = Number(req.params.user_id)
         teamsService.getById(
             req.app.get('db'),
-            user_teamId
+            user_Id
         )
             .then(user_team => {
                 if (!user_team) {
