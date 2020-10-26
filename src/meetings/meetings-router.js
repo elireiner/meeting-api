@@ -166,7 +166,37 @@ meetingRouter
                 meeting_time: xss(meeting.meeting_time) //TODO: sanitize title with map serialize
             }
         })
-        
+
+        res.json(meetings)
+    })
+
+meetingRouter
+    .route('/recurring/:user_id')
+    .all((req, res, next) => {
+        const userId = req.params.user_id
+        MeetingsService.getUsersRecurringMeetingNames(
+            req.app.get('db'),
+            userId
+        )
+            .then(meetings => {
+                if (!meetings) {
+                    return res.status(404).json({
+                        error: { message: `Meeting does not exist` }
+                    })
+                }
+                res.meetings = meetings.rows;
+                next()
+            })
+            .catch(next)
+
+    })
+    .get((req, res, next) => {
+        meetings = res.meetings.map(meeting => {
+            return {
+                meeting_id: meeting.meeting_id,
+                meeting_name: xss(meeting.recurring_meeting_name),
+            }
+        })
         res.json(meetings)
     })
 
