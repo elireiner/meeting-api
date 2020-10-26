@@ -7,7 +7,7 @@ CREATE TABLE meetings (
     description text NOT NULL,
     user_team_id int REFERENCES user_team (user_team_pkey) ON DELETE CASCADE,
     recurring boolean NOT NULL,
-    recurring_id int DEFAULT NULL,
+    recurring_id int REFERENCES recurring_meetings (recurring_meeting_id) ON DELETE CASCADE,
     meeting_time TIMESTAMPTZ NOT NULL
 );
 
