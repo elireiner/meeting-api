@@ -1,0 +1,2 @@
+TRUNCATE TABLE recurring_meetings RESTART IDENTITY CASCADE;
+DROP TABLE IF EXISTS recurring_meetings;
