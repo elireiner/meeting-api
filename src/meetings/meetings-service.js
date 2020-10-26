@@ -13,13 +13,24 @@ const MeetingsService = {
                 return rows[0]
             })
     },
+    
+//TODO: look into bulk insert
+    insertParticipants(knex, meetingId, participant) {
+        return knex
+            .insert(participant)
+            .into('user_meeting')
+            .returning('*')
+            .then(rows => {
+                return rows[0]
+            })
+    },
 
     getById(knex, id) {
         return knex.from('meetings').select('*').where('_id', id).first()
     },
 
     getByUserId(knex, id) {
-        return knex.raw(`select * from meetings inner join user_meeting on meetings.meeting_id=user_meeting.meeting_id inner join users on user_meeting.user_id=users.user_id where users.user_id=1;`)
+        return knex.raw(`select * from meetings inner join user_meeting on meetings.meeting_id=user_meeting.meeting_id inner join users on user_meeting.user_id=users.user_id where users.user_id=?;`, [id])
     },
     
     deleteMeeting(knex, _id) {
