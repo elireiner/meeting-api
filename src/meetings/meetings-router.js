@@ -28,7 +28,7 @@ meetingRouter
             .catch(next)
     })
     .post(jsonParser, (req, res, next) => {
-        const { _id, meeting_name, meeting_type, description, user_team_id, recurring, recurring_id, meeting_time } = req.body;
+        const { _id, meeting_name, meeting_type, description, user_team_id, recurring, recurring_id, meeting_time, participants } = req.body;
         const newMeeting = { _id, meeting_name, meeting_type, description, user_team_id, recurring, recurring_id, meeting_time };
 
         for (const [key, value] of Object.entries(newMeeting)) {
@@ -43,6 +43,20 @@ meetingRouter
             req.app.get('db'),
             newMeeting
         )
+            .then(res => {
+                //Check if meeting id came back
+                if (res.meeting_id > 0) {
+                    //TODO: look into bulk insert
+                    //loop over participants array
+                    participants.map(participant => {
+                        MeetingsService.insertParticipants(
+                            req.app.get('db'),
+                            res.meeting_id,
+                            participant
+                        )
+                    })
+                }
+            })
             .then(meeting => {
                 res
                     .status(201)
@@ -53,7 +67,7 @@ meetingRouter
     })
 
 meetingRouter
-    .route('/:_id')
+    .route('/meeting/:_id')
     .all((req, res, next) => {
         const meetingId = req.params._id
         MeetingsService.getById(
