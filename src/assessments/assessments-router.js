@@ -26,7 +26,7 @@ assessmentRouter
             .catch(next)
     })
     .post(jsonParser, (req, res, next) => {
-        let { _id, metric_id, metric_value, user_id, meeting_id} = req.body;
+        let { _id, metric_id, metric_value, user_id, meeting_id } = req.body;
 
         metric_id = Number(metric_id);
         metric_value = Number(metric_value);
@@ -59,10 +59,10 @@ assessmentRouter
 
 
 assessmentRouter
-    .route('/user/:_id')
+    .route('/:user_id')
     .all((req, res, next) => {
-        const userId = Number(req.params._id)
-        AssessmentsService.getUsersRecurringMeetingsAssessAvg(
+        const userId = Number(req.params.user_id)
+        AssessmentsService.getAllAssessmentsForUser(
             req.app.get('db'),
             userId
         )
@@ -81,7 +81,7 @@ assessmentRouter
     .get((req, res, next) => {
         res.status(200).json(res.assessments)
     })
-    .delete(jsonParser, (req, res, next) => {
+/*  .delete(jsonParser, (req, res, next) => {
         AssessmentsService.deleteAssessment(req.app.get('db'),
             req.params._id)
             .then(numRowsAffected => {
@@ -89,7 +89,6 @@ assessmentRouter
             })
             .catch(next)
     })
-/*
 .patch(jsonParser, (req, res, next) => {
     const { assessment_name } = req.body;
     const assessmentToUpdate = { assessment_name }
@@ -115,12 +114,41 @@ assessmentRouter
 })*/
 
 assessmentRouter
-    .route('/assessments/meeting/:_id')
+    .route('/:user_id/:meeting_id')
     .all((req, res, next) => {
-        const assessmentId = Number(req.params._id)
-        AssessmentsService.getAllAssessmentsForMeeting(
+        const userId = Number(req.params.user_id);
+        const meetingId = Number(req.params.meeting_id);
+        AssessmentsService.getUserAssessmentForMeeting(
             req.app.get('db'),
+            userId,
             meetingId
+        )
+            .then(assessment => {
+                if (!assessment) {
+                    return res.status(404).json({
+                        error: { message: `Assessment does not exist` }
+                    })
+                }
+                res.assessment = assessment.rows;
+                next()
+            })
+            .catch(next)
+
+    })
+    .get((req, res, next) => {
+        //todo: serialize response
+        res.status(200).json(res.assessment)
+    })
+
+
+assessmentRouter
+    .route('/trends/individual-meetings/:user_id')
+    .all((req, res, next) => {
+        const userId = Number(req.params.user_id)
+        console.log(userId)
+        AssessmentsService.getUsersMeetingsAssessAvg(
+            req.app.get('db'),
+            userId
         )
             .then(assessment => {
                 if (!assessment) {
@@ -137,5 +165,91 @@ assessmentRouter
     .get((req, res, next) => {
         res.status(200).json(res.assessment)
     })
+
+
+//todo: change getUsersMeetingsAssessAvg to getUsersOneMeetingsAssessAvg; and add service method
+
+/*assessmentRouter
+    .route('/trends/individual-meetings/:user_id/:meetingId')
+    .all((req, res, next) => {
+        const userId = Number(req.params._id)
+        const meetingId = Number(req.params.meetingId)
+
+        AssessmentsService.getUsersMeetingsAssessAvg(
+            req.app.get('db'),
+            userId
+        )
+            .then(assessment => {
+                if (!assessment) {
+                    return res.status(404).json({
+                        error: { message: `Assessment does not exist` }
+                    })
+                }
+                res.assessment = assessment;
+                next()
+            })
+            .catch(next)
+
+    })
+    .get((req, res, next) => {
+        res.status(200).json(res.assessment)
+    })
+    */
+
+assessmentRouter
+    .route('/trends/cumulative/:user_id')
+    .all((req, res, next) => {
+        const userId = Number(req.params.user_id)
+        console.log("test")
+        AssessmentsService.getUsersRecurringMeetingsAssessAvg(
+            req.app.get('db'),
+            userId
+        )
+            .then(assessment => {
+                if (!assessment) {
+                    return res.status(404).json({
+                        error: { message: `Assessment does not exist` }
+                    })
+                }
+                res.assessment = assessment;
+                next()
+            })
+            .catch(next)
+
+    })
+    .get((req, res, next) => {
+        res.status(200).json(res.assessment)
+    })
+
+
+//todo: change getUsersRecurringMeetingsAssessAvg to getUsersOneRecurringMeetingsAssessAvg; and add service method
+/* 
+ 
+assessmentRouter
+ .route('/trends/cumulative/:user_id/:recurring_meeting_id')
+ .all((req, res, next) => {
+     const userId = Number(req.params.user_id)
+     const recurringMeetingId = Number(req.params.recurring_meeting_id)
+     
+     AssessmentsService.getUsersRecurringMeetingsAssessAvg(
+         req.app.get('db'),
+         userId,
+         recurringMeetingId
+     )
+         .then(assessment => {
+             if (!assessment) {
+                 return res.status(404).json({
+                     error: { message: `Assessment does not exist` }
+                 })
+             }
+             res.assessment = assessment;
+             next()
+         })
+         .catch(next)
+
+ })
+ .get((req, res, next) => {
+     res.status(200).json(res.assessment)
+ })*/
 
 module.exports = assessmentRouter
