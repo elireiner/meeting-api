@@ -193,8 +193,8 @@ meetingRouter
     .get((req, res, next) => {
         meetings = res.meetings.map(meeting => {
             return {
-                recurring_meeting_id: meeting.recurring_meeting_id,
-                recurring_meeting_name: xss(meeting.recurring_meeting_name),
+                meeting_id: meeting.recurring_meeting_id,
+                meeting_name: xss(meeting.recurring_meeting_name),
             }
         })
         res.json(meetings)
