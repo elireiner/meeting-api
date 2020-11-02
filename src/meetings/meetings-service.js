@@ -40,7 +40,7 @@ const MeetingsService = {
     },
 
     getUsersRecurringMeetingNames(knex, id) {
-        return knex.raw(`select recurring_meetings.recurring_meeting_name from recurring_meetings inner join meetings on recurring_meetings.recurring_meeting_id=meetings.recurring_id 
+        return knex.raw(`select distinct recurring_meetings.recurring_meeting_name, recurring_meetings.recurring_meeting_id from recurring_meetings inner join meetings on recurring_meetings.recurring_meeting_id=meetings.recurring_id 
         inner join user_meeting on meetings.meeting_id=user_meeting.meeting_id where user_meeting.user_id=?`, [id])
     },
 
