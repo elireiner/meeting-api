@@ -211,7 +211,7 @@ assessmentRouter
                         error: { message: `Assessment does not exist` }
                     })
                 }
-                res.assessment = assessment;
+                res.assessment = assessment.rows;
                 next()
             })
             .catch(next)
