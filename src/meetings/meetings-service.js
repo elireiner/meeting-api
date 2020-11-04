@@ -7,7 +7,7 @@ const MeetingsService = {
     insertMeeting(knex, newMeeting) {
         return knex
             .insert(newMeeting)
-            .into('meetings')
+            .into('mvp_meetings')
             .returning('*')
             .then(rows => {
                 return rows[0]

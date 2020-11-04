@@ -28,9 +28,10 @@ meetingRouter
             .catch(next)
     })
     .post(jsonParser, (req, res, next) => {
-        const { _id, meeting_name, meeting_type, description, user_team_id, recurring, recurring_id, meeting_time, participants } = req.body;
-        const newMeeting = { _id, meeting_name, meeting_type, description, user_team_id, recurring, recurring_id, meeting_time };
-
+        //const { _id, meeting_name, meeting_type, description, user_team_id, recurring, recurring_id, meeting_time, participants } = req.body;
+        // const newMeeting = { _id, meeting_name, meeting_type, description, user_team_id, recurring, recurring_id, meeting_time };
+        const { meeting_name, meeting_type, description, meeting_time } = req.body;
+        const newMeeting = { meeting_name, meeting_type, description, meeting_time };
         for (const [key, value] of Object.entries(newMeeting)) {
             if (!value) {
                 return res.status(400).json({
@@ -43,20 +44,6 @@ meetingRouter
             req.app.get('db'),
             newMeeting
         )
-            .then(res => {
-                //Check if meeting id came back
-                if (res.meeting_id > 0) {
-                    //TODO: look into bulk insert
-                    //loop over participants array
-                    participants.map(participant => {
-                        MeetingsService.insertParticipants(
-                            req.app.get('db'),
-                            res.meeting_id,
-                            participant
-                        )
-                    })
-                }
-            })
             .then(meeting => {
                 res
                     .status(201)
@@ -64,6 +51,28 @@ meetingRouter
                     .json(serialize(meeting))
             })
             .catch(next)
+
+        /*  .then(res => {
+              //Check if meeting id came back
+              if (res.meeting_id > 0) {
+                  //TODO: look into bulk insert
+                  //loop over participants array
+                  participants.map(participant => {
+                      MeetingsService.insertParticipants(
+                          req.app.get('db'),
+                          res.meeting_id,
+                          participant
+                      )
+                  })
+              }
+          })*/
+        /* .then(meeting => {
+             res
+                 .status(201)
+                 .location(path.posix.join(req.originalUrl, `/${meeting.meeting_id}`))
+                 .json(serialize(meeting))
+         })
+         .catch(next)*/
     })
 
 meetingRouter
