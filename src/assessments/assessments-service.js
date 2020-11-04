@@ -33,16 +33,17 @@ const AssessmentsService = {
             .orderBy(knex.raw(`assesment.meeting_id, assesment.metric_id`))
     },
 
-    // get the cumulative average of each recurring meeting a user was a participant
-    getUsersRecurringMeetingsAssessAvg(knex, id) {
-        return knex.raw(`select meetings.recurring_id,assesment.metric_id, avg(individual_avg) as cumulative_avg
+    // get the cumulative average of a recurring meeting a user was a participant
+    getUsersRecurringMeetingsAssessAvgForRecurring(knex, userId, recurringMeetingId) {
+        return knex.raw(`select meetings.recurring_id, assesment.metric_id, avg(individual_avg) as cumulative_avg
         from (select assesment.meeting_id, assesment.metric_id, avg(metric_value) as individual_avg
                 from assesment 
                   where assesment.meeting_id in (select distinct meeting_id from user_meeting where user_meeting.user_id=?)
                 group by assesment.metric_id, assesment.meeting_id
                 order by assesment.meeting_id, assesment.metric_id) as individual_meetings inner join meetings on individual_meetings.meeting_id=meetings.meeting_id
                 inner join assesment on meetings.meeting_id=assesment.meeting_id
-                group by meetings.recurring_id, assesment.metric_id;`, [id])
+                group by meetings.recurring_id, assesment.metric_id
+                having meetings.recurring_id=??;`, [userId, recurringMeetingId])
     },
 
     /*deleteAssessment(knex, id) {
