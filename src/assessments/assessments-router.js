@@ -43,18 +43,18 @@ assessmentRouter
             }
         }
 
-        AssessmentsService.insertAssessment(
-            req.app.get('db'),
-            newAssessment
-        )
-            .then(assessment => {
-                console.log(assessment)
-                res
-                    .status(201)
-                    .location(path.posix.join(req.originalUrl, `/${assessment.rows[0].assesment_pkey}`))
-                    .json(serialize(assessment.rows[0]))
-            })
-            .catch(next)
+  
+         AssessmentsService.insertAssessment(
+             req.app.get('db'),
+             newAssessment
+         )
+             .then(assessment => {
+                 res
+                     .status(201)
+                     .location(path.posix.join(req.originalUrl, `/${assessment.rows[0].assesment_pkey}`))
+                     .json(serialize(assessment.rows[0]))
+             })
+             .catch(next)
     })
 
 
@@ -197,13 +197,15 @@ assessmentRouter
     */
 
 assessmentRouter
-    .route('/trends/cumulative/:user_id')
+    .route('/trends/cumulative/:user_id/:recurringMeetingId')
     .all((req, res, next) => {
         const userId = Number(req.params.user_id)
+        const recurringMeetingId = Number(req.params.recurringMeetingId)
         console.log("test")
-        AssessmentsService.getUsersRecurringMeetingsAssessAvg(
+        AssessmentsService.getUsersRecurringMeetingsAssessAvgForRecurring(
             req.app.get('db'),
-            userId
+            userId,
+            recurringMeetingId
         )
             .then(assessment => {
                 if (!assessment) {
