@@ -42,6 +42,8 @@ describe('/api/metrics', () => {
         })
     })
     
+    // TODO: add test for deleting specific metric
+
     describe('DELETE /api/metrics', () => {
         context('When there are metrics in the table', () => {
 
